@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React ,{useState,useEffect} from "react";
+import Table from "./components/OutputData/Table";
+import OrderForm from "./components/InputForm/OrderForm";
 
-function App() {
+const App = () => {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const storedOrders = JSON.parse(localStorage.getItem('orders'));
+    if (storedOrders) {
+      setOrders(storedOrders);
+    }
+  }, []);
+
+  const addToBill = (order) => {
+    const updatedOrders = [...orders, order];
+    setOrders(updatedOrders);
+    localStorage.setItem('orders', JSON.stringify(updatedOrders));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <OrderForm addToBill={addToBill} />
+      <Table orders={orders} tableNumber="table1" />
+      <Table orders={orders} tableNumber="table2" />
+      <Table orders={orders} tableNumber="table3" />
     </div>
   );
-}
-
+};
 export default App;
